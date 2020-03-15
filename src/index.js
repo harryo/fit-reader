@@ -1,13 +1,25 @@
-import "./index.css";
+import FitReader from './FitReader';
 
-class MyLibrary {
-  constructor() {
-    console.log("Library constructor loaded");
-  }
-
-  myMethod = () => {
-    console.log("Library method fired");
-  };
+function fitReader(buffer, onProgress) {
+  const reader = new FitReader(buffer);
+  reader.parse(onProgress);
+  return reader.globalData;
+  // const allPoints = [];
+  // const result = {
+  //   data: reader.globalData.map((msg) => {
+  //     const points = readGeoMessage(msg);
+  //     if (points.length === 0) {
+  //       return msg;
+  //     }
+  //     allPoints.push(points);
+  //     return {
+  //       ...msg,
+  //       points,
+  //     };
+  //   }),
+  // };
+  // result.points = allPoints.flat().sort((a, b) => (Math.sign(a - b)));
+  // return result;
 }
 
-export default MyLibrary;
+export default fitReader;
