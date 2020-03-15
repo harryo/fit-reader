@@ -1,7 +1,7 @@
 {
-  "name": "@hodgef/js-library-boilerplate-basic",
-  "version": "1.3.12",
-  "description": "Javascript Minimal Starter Kit for building libraries",
+  "name": "fit-reader",
+  "version": "1.0.0",
+  "description": "Convert FIT files to JSON",
   "main": "build/index.js",
   "scripts": {
     "build": "webpack",
@@ -11,17 +11,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/hodgef/js-library-boilerplate-basic"
+    "url": "https://github.com/harryo/fit-reader"
   },
-  "author": "Francisco Hodge <hello@franciscohodge.com> (https://github.com/hodgef)",
+  "author": "Harry Oosterveen <mail@harryonline.net> (https://github.com/harryo)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/hodgef/js-library-boilerplate-basic/issues"
+    "url": "https://github.com/harryo/fit-reader/issues"
   },
-  "homepage": "https://github.com/hodgef/js-library-boilerplate-basic",
+  "homepage": "https://github.com/harryo/fit-reader",
   "keywords": [
-    "library",
-    "starter",
+    "fit-file",
+    "converter",
+    "json",
     "es6"
   ],
   "devDependencies": {

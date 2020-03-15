@@ -27,7 +27,7 @@ module.exports = {
   output: {
     filename: 'index.js',
     path: path.resolve(__dirname, 'build'),
-    library: 'MyLibrary',
+    library: 'fit-reader',
     libraryTarget: 'umd'
   },
   module: {
