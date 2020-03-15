@@ -22,21 +22,20 @@ class BinaryFile {
     this.littleEndian = littleEndian;
   }
 
-  checkLittleEndian() {
-    if (this.littleEndian === undefined) {
-      throw new Error('Endian not defined')
-    }
-  }
-
   /**
    * Read a number from the file, used by read function
    * @param {string} type 
    * @param {int} size 
    * @param {boolean} this.littleEndian 
    */
-  readNumber(type, size) {
+  readNumber(type, size, littleEndian = this.littleEndian) {
     const view = new DataView(this.buffer, this.position, size);
     this.position += size;
+    const isMultiByte = (tp) => /\d{2}/.test(tp);
+    if ((littleEndian === undefined) && isMultiByte(type)) {
+      console.log(type, littleEndian, isMultiByte(type));
+      throw new Error('Endian not defined')
+    }
     switch (type) {
       case 'enum':
       case 'uint8':
@@ -46,24 +45,18 @@ class BinaryFile {
         return view.getInt8(0);
       case 'uint16':
       case 'uint16z':
-        checkLittleEndian();
-          return view.getUint16(0, this.littleEndian);
+        return view.getUint16(0, littleEndian);
       case 'sint16':
-        checkLittleEndian();
-          return view.getInt16(0, this.littleEndian);
+        return view.getInt16(0, littleEndian);
       case 'uint32':
       case 'uint32z':
-        checkLittleEndian();
-          return view.getUint32(0, this.littleEndian);
+        return view.getUint32(0, littleEndian);
       case 'sint32':
-        checkLittleEndian();
-          return view.getInt32(0, this.littleEndian);
+        return view.getInt32(0, littleEndian);
       case 'float32':
-        checkLittleEndian();
-          return view.getFloat32(0, this.littleEndian).toPrecision(7);
+        return view.getFloat32(0, littleEndian).toPrecision(7);
       case 'float64':
-        checkLittleEndian();
-          return view.getFloat64(0, this.littleEndian).toPrecision(16);
+        return view.getFloat64(0, littleEndian).toPrecision(16);
       default:
         throw new Error(`unknown type ${type}`);
     }
@@ -100,7 +93,7 @@ class BinaryFile {
    * @param {int} size 
    * @param {boolean} this.littleEndian 
    */
-  read(type, size) {
+  read(type, size, littleEndian) {
     switch (type) {
       case 'string': {
         return this.readString(size);
@@ -109,7 +102,7 @@ class BinaryFile {
         return this.readBytes(size);
       }
       default: {
-        return this.readNumber(type, size);
+        return this.readNumber(type, size, littleEndian);
       }
     }
   };
@@ -118,21 +111,21 @@ class BinaryFile {
    * Read single 8-bit number
    */
   readUInt8() {
-    return this.read('uint8', 1);
+    return this.readNumber('uint8', 1);
   };
 
   /**
    * Read single 16-bit number
    */
-  readUInt16() {
-    return this.read('uint16', 2, this.littleEndian);
+  readUInt16(littleEndian) {
+    return this.readNumber('uint16', 2, littleEndian);
   };
 
   /**
    * Read single 32-bit number
    */
-  readUInt32() {
-    return this.read('uint32', 4, this.littleEndian);
+  readUInt32(littleEndian) {
+    return this.readNumber('uint32', 4, littleEndian);
   };
 }
 

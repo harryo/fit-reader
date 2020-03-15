@@ -2,6 +2,7 @@
  * Class FitReader
  */
 import BinaryFile from './BinaryFile';
+import readFileHeader from './readFileHeader';
 
 class FitReader {
   constructor(buffer) {
@@ -19,6 +20,7 @@ class FitReader {
 
   parse(onProgress) {
     onProgress('testing');
+    this.header = readFileHeader(this.file);
   }
 
 }
