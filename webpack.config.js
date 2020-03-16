@@ -28,7 +28,8 @@ module.exports = {
     filename: 'index.js',
     path: path.resolve(__dirname, 'build'),
     library: 'fit-reader',
-    libraryTarget: 'umd'
+    libraryTarget: 'umd',
+    globalObject: 'this',
   },
   module: {
     rules: [

@@ -3,7 +3,7 @@ import FitReader from "./FitReader";
 function fitReader(buffer, onProgress) {
   const reader = new FitReader(buffer);
   reader.parse(onProgress);
-  return reader;
+  return reader.globalData;
   // const allPoints = [];
   // const result = {
   //   data: reader.globalData.map((msg) => {
