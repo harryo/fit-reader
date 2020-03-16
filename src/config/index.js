@@ -1,4 +1,4 @@
-import profile from "./profile.json";
+import profile from './profile.json';
 
 export function getType(key, value) {
   const result = profile.types[key].values[value];

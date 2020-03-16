@@ -32,31 +32,30 @@ class BinaryFile {
   readNumber(type, size, littleEndian = this.littleEndian) {
     const view = new DataView(this.buffer, this.position, size);
     this.position += size;
-    const isMultiByte = tp => /\d{2}/.test(tp);
+    const isMultiByte = (tp) => /\d{2}/.test(tp);
     if (littleEndian === undefined && isMultiByte(type)) {
-      console.log(type, littleEndian, isMultiByte(type));
-      throw new Error("Endian not defined");
+      throw new Error('Endian not defined');
     }
     switch (type) {
-      case "enum":
-      case "uint8":
-      case "uint8z":
+      case 'enum':
+      case 'uint8':
+      case 'uint8z':
         return view.getUint8(0);
-      case "sint8":
+      case 'sint8':
         return view.getInt8(0);
-      case "uint16":
-      case "uint16z":
+      case 'uint16':
+      case 'uint16z':
         return view.getUint16(0, littleEndian);
-      case "sint16":
+      case 'sint16':
         return view.getInt16(0, littleEndian);
-      case "uint32":
-      case "uint32z":
+      case 'uint32':
+      case 'uint32z':
         return view.getUint32(0, littleEndian);
-      case "sint32":
+      case 'sint32':
         return view.getInt32(0, littleEndian);
-      case "float32":
+      case 'float32':
         return view.getFloat32(0, littleEndian).toPrecision(7);
-      case "float64":
+      case 'float64':
         return view.getFloat64(0, littleEndian).toPrecision(16);
       default:
         throw new Error(`unknown type ${type}`);
@@ -70,7 +69,7 @@ class BinaryFile {
   readBytes(size) {
     const nextPosition = this.position + size;
     const result = new Uint8Array(
-      this.buffer.slice(this.position, nextPosition)
+      this.buffer.slice(this.position, nextPosition),
     );
     this.position = nextPosition;
     return result;
@@ -83,7 +82,7 @@ class BinaryFile {
    */
   readString(size) {
     const bytes = Array.from(this.readBytes(size));
-    const i0 = bytes.findIndex(byte => byte === 0);
+    const i0 = bytes.findIndex((byte) => byte === 0);
     if (i0 !== -1) {
       bytes.splice(i0);
     }
@@ -98,10 +97,10 @@ class BinaryFile {
    */
   read(type, size, littleEndian) {
     switch (type) {
-      case "string": {
+      case 'string': {
         return this.readString(size);
       }
-      case "byte": {
+      case 'byte': {
         return this.readBytes(size);
       }
       default: {
@@ -114,21 +113,21 @@ class BinaryFile {
    * Read single 8-bit number
    */
   readUInt8() {
-    return this.readNumber("uint8", 1);
+    return this.readNumber('uint8', 1);
   }
 
   /**
    * Read single 16-bit number
    */
   readUInt16(littleEndian) {
-    return this.readNumber("uint16", 2, littleEndian);
+    return this.readNumber('uint16', 2, littleEndian);
   }
 
   /**
    * Read single 32-bit number
    */
   readUInt32(littleEndian) {
-    return this.readNumber("uint32", 4, littleEndian);
+    return this.readNumber('uint32', 4, littleEndian);
   }
 }
 

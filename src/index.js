@@ -1,4 +1,4 @@
-import FitReader from "./FitReader";
+import FitReader from './FitReader';
 
 function fitReader(buffer, onProgress) {
   const reader = new FitReader(buffer);

@@ -6,7 +6,7 @@ export function int2date(n) {
 
 export function int2iso(n) {
   const date = new Date(1000 * (n + OFFSET));
-  return date.toISOString().replace(/\.000Z$/, "Z");
+  return date.toISOString().replace(/\.000Z$/, 'Z');
 }
 
 export function date2int(date) {
@@ -18,5 +18,5 @@ export function fromOffset(timeOffset, lastTimestamp) {
   if (timestamp < lastTimestamp) {
     timestamp += 0x20;
   }
-  return { value: timestamp, type: "date_time" };
+  return { value: timestamp, type: 'date_time' };
 }

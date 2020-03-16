@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-const PrettierPlugin = require("prettier-webpack-plugin");
+// const PrettierPlugin = require('prettier-webpack-plugin');
 const getPackageJson = require('./scripts/getPackageJson');
 
 const {
@@ -15,14 +15,14 @@ const banner = `
   ${name} v${version}
   ${repository.url}
 
-  Copyright (c) ${author.replace(/ *\<[^)]*\> */g, " ")}
+  Copyright (c) ${author.replace(/ *\<[^)]*\> */g, ' ')}
 
   This source code is licensed under the ${license} license found in the
   LICENSE file in the root directory of this source tree.
 `;
 
 module.exports = {
-  mode: "production",
+  mode: 'production',
   entry: './src/index.js',
   output: {
     filename: 'index.js',
@@ -37,8 +37,8 @@ module.exports = {
         test: /\.m?js$/,
         exclude: /(node_modules|bower_components)/,
         use: {
-          loader: 'babel-loader'
-        }
+          loader: 'babel-loader',
+        },
       },
       {
         test: /\.css$/i,
@@ -47,11 +47,11 @@ module.exports = {
       {
         test: /\.(png|jpe?g|gif|svg|eot|ttf|woff|woff2)$/,
         use: ['url-loader'],
-      }
-    ]
+      },
+    ],
   },
   plugins: [
-    new PrettierPlugin(),
-    new webpack.BannerPlugin(banner)
-  ]
+    // new PrettierPlugin(),
+    new webpack.BannerPlugin(banner),
+  ],
 };

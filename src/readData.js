@@ -1,15 +1,13 @@
-import findKey from "lodash/findKey";
-import isInvalid from "./isInvalid";
-import getFieldData from "./getFieldData";
-import profile from "./config/profile.json";
-import { getType } from "./config";
-import { int2date } from "./datetime";
+// import findKey from 'lodash/findKey';
+import isInvalid from './isInvalid';
+import getFieldData from './getFieldData';
+import profile from './config/profile.json';
+import { getType } from './config';
+import { int2date } from './datetime';
 
 const FIELD_DESCRIPTION = profile.types.mesg_num.names.field_description;
-const NATIVE_MESG_NUM =
-  profile.messages.field_description.names.native_mesg_num;
-const NATIVE_FIELD_NUM =
-  profile.messages.field_description.names.native_mesg_num.native_field_num;
+const NATIVE_MESG_NUM = profile.messages.field_description.names.native_mesg_num;
+const NATIVE_FIELD_NUM = profile.messages.field_description.names.native_mesg_num.native_field_num;
 
 function getFieldType(fldDef, obj) {
   const { fieldType, options } = fldDef;
@@ -17,16 +15,15 @@ function getFieldType(fldDef, obj) {
     return fieldType;
   }
   const optionDef = options.find(
-    opt => obj[opt.refFieldName] === opt.refFieldValue
+    (opt) => obj[opt.refFieldName] === opt.refFieldValue,
   );
   return optionDef ? optionDef.fieldType : fieldType;
 }
 
 function processValue(value, def, obj) {
-  const { baseTypeLabel, fieldDefinition } = def;
-  const { scale, offset } = fieldDefinition;
-  const fieldType = getFieldType(def.fieldDefinition, obj);
-  if (typeof value === "number") {
+  const { baseTypeLabel, scale, offset } = def;
+  const fieldType = getFieldType(def, obj);
+  if (typeof value === 'number') {
     if (scale) {
       value /= scale;
     }
@@ -35,13 +32,16 @@ function processValue(value, def, obj) {
     }
   }
   switch (fieldType) {
-    case "byte":
+    case 'byte':
       return value.toString();
-    case "bool":
+    case 'bool':
       return Boolean(value);
-    case "date_time":
-    case "local_date_time":
+    case 'date_time':
+    case 'local_date_time':
       return int2date(value);
+    case 'semicircles':
+      debugger;
+      return value;
     case undefined:
     case baseTypeLabel:
       return value;
@@ -52,11 +52,11 @@ function processValue(value, def, obj) {
 
 function readData(file, localMessageType) {
   const result = {};
-  localMessageType.fieldDefinitions.forEach(def => {
+  localMessageType.fieldDefinitions.forEach((def) => {
     const binValue = file.read(
       def.baseTypeLabel,
       def.size,
-      !localMessageType.architecture
+      !localMessageType.architecture,
     );
     if (def.fieldDescription) {
       debugger;
@@ -64,23 +64,22 @@ function readData(file, localMessageType) {
     if (isInvalid(def.baseTypeLabel, binValue) || binValue === null) {
       return;
     }
-    if (!def.fieldDefinition) {
+    if (!def.fieldName) {
       result[`field_${def.fieldDefinitionNumber}`] = binValue;
       return;
     }
-    result[def.fieldDefinition.fieldName] = processValue(binValue, def, result);
+    result[def.fieldName] = processValue(binValue, def, result);
   });
   if (localMessageType.globalMessageNumber === FIELD_DESCRIPTION) {
     debugger;
-    const nativeMessageType =
-      fitDefinition.messages[result[NATIVE_MESG_NUM].value];
+    const nativeMessageType = fitDefinition.messages[result[NATIVE_MESG_NUM].value];
     if (result[NATIVE_FIELD_NUM] === undefined) {
       // eslint-disable-next-line no-console
       console.log(
-        "Expected attribute",
+        'Expected attribute',
         NATIVE_FIELD_NUM,
         result,
-        result[NATIVE_MESG_NUM].value
+        result[NATIVE_MESG_NUM].value,
       );
     } else {
       const nativeFieldNum = result[NATIVE_FIELD_NUM].value;
@@ -97,20 +96,20 @@ function readData(file, localMessageType) {
         const value = file.read(
           def.baseTypeLabel,
           def.size,
-          !localMessageType.architecture
+          !localMessageType.architecture,
         );
         const fieldData = getFieldData(def);
         const key = fieldData.id;
-        if (def.baseTypeLabel !== "string" && isNaN(value)) {
+        if (def.baseTypeLabel !== 'string' && isNaN(value)) {
           // eslint-disable-line no-restricted-globals
           return acc;
         }
         return {
           ...acc,
-          [key]: { value, type: def.baseTypeLabel }
+          [key]: { value, type: def.baseTypeLabel },
         };
       },
-      {}
+      {},
     );
     Object.assign(result, developerResult);
   }

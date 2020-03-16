@@ -11,7 +11,7 @@ const INVALID_VALUES = {
   uint8z: 0x00,
   uint16z: 0x0000,
   uint32z: 0x00000000,
-  byte: 0xff
+  byte: 0xff,
 };
 
 function invalidByte(value) {
@@ -20,9 +20,9 @@ function invalidByte(value) {
 
 function isInvalid(type, value) {
   switch (type) {
-    case "string":
+    case 'string':
       return value.length === 0;
-    case "byte":
+    case 'byte':
       return value.every(invalidByte);
     default:
       return value === INVALID_VALUES[type];

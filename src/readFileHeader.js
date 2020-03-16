@@ -6,7 +6,7 @@
 function readFileHeader(file) {
   const headerSize = file.readUInt8();
   if (headerSize !== 12 && headerSize !== 14) {
-    throw new Error("Incorrect header size");
+    throw new Error('Incorrect header size');
   }
   const protocolVersion = file.readUInt8();
 
@@ -16,7 +16,7 @@ function readFileHeader(file) {
   const dataSize = file.readUInt32(true);
 
   const dataType = file.readString(4);
-  if (dataType !== ".FIT") {
+  if (dataType !== '.FIT') {
     throw new Error("Missing 'FIT' in header");
   }
 
@@ -28,7 +28,7 @@ function readFileHeader(file) {
     profileVersion,
     dataSize,
     dataType,
-    CRC
+    CRC,
   };
 }
 

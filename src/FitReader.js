@@ -1,11 +1,13 @@
 /**
  * Class FitReader
  */
-import BinaryFile from "./BinaryFile";
-import readFileHeader from "./readFileHeader";
-import readRecordHeader from "./readRecordHeader";
-import readDefinition from "./readDefinition";
-import readData from "./readData";
+import BinaryFile from './BinaryFile';
+import readFileHeader from './readFileHeader';
+import readRecordHeader from './readRecordHeader';
+import readDefinition from './readDefinition';
+import readData from './readData';
+import { fromOffset } from './datetime';
+import namedFields from './namedFields';
 
 class FitReader {
   constructor(buffer) {
@@ -17,7 +19,7 @@ class FitReader {
     this.localMessageTypeList = {};
     this.developerDataFields = {
       developer_data_id: [],
-      field_description: []
+      field_description: [],
     };
   }
 
@@ -34,8 +36,7 @@ class FitReader {
   }
 
   getDefinitionId(definition) {
-    const name =
-      definition.messageType || `mesg_num_${definition.globalMessageNumber}`;
+    const name = definition.messageType || `mesg_num_${definition.globalMessageNumber}`;
     const index = (this.definitionCounter[name] || 0) + 1;
     this.definitionCounter[name] = index;
     return `${name}_${index}`;
@@ -43,7 +44,7 @@ class FitReader {
 
   readRecord() {
     const recordHeader = readRecordHeader(this.file);
-    if (recordHeader.messageType === "definition") {
+    if (recordHeader.messageType === 'definition') {
       this.readDefinition(recordHeader);
     } else {
       this.readData(recordHeader);
@@ -53,14 +54,14 @@ class FitReader {
   readDefinition(recordHeader) {
     const data = readDefinition(
       this.file,
-      recordHeader.developerData ? this.developerDataFields : null
+      recordHeader.developerData ? this.developerDataFields : null,
     );
     data.globalIndex = this.globalData.length;
     this.localMessageTypeList[recordHeader.localMessageType] = data;
     this.globalData.push({
       id: this.getDefinitionId(data),
       definition: data,
-      data: []
+      data: [],
     });
   }
 
@@ -72,10 +73,10 @@ class FitReader {
     if (data.timestamp) {
       this.lastTimestamp = data.timestamp;
     }
-    if (recordHeader.headerType === "compressed timestamp") {
+    if (recordHeader.headerType === 'compressed timestamp') {
       data.timestamp = fromOffset(
         recordHeader.timeOffset,
-        this.lastTimestamp.value
+        this.lastTimestamp.value,
       );
     }
     this.globalData[localMessageType.globalIndex].data.push(data);
@@ -83,7 +84,7 @@ class FitReader {
     if (this.developerDataFields[msgType]) {
       debugger;
       this.developerDataFields[msgType].push(
-        namedFields(localMessageType.fieldDefinitions, data)
+        namedFields(localMessageType.fieldDefinitions, data),
       );
     }
   }
