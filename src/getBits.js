@@ -1,4 +1,3 @@
-
 /* eslint-disable no-bitwise */
 
 function getBits(byte, idx, n) {

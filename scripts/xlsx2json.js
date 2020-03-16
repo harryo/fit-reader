@@ -12,7 +12,7 @@ const [inFile, outFile] = process.argv.slice(2);
 const workbook = XLSX.readFile(inFile);
 const types = getTypes(parseSheet(workbook.Sheets.Types));
 const messages = getMessages(parseSheet(workbook.Sheets.Messages));
-fs.writeFileSync(outFile, JSON.stringify({ types, messages }, null, 2));
+fs.writeFileSync(outFile, JSON.stringify({ types, messages }));
 
 function getMessages(data) {
   let currentMessage;
@@ -23,6 +23,7 @@ function getMessages(data) {
     if (messageName) {
       currentMessage = {
         ...rest,
+        names: {},
         fields: {},
       };
       result[messageName] = currentMessage;
@@ -30,6 +31,7 @@ function getMessages(data) {
     }
     if (fieldDef !== undefined) {
       currentField = rest;
+      currentMessage.names[row.fieldName] = fieldDef;
       currentMessage.fields[fieldDef] = currentField;
       return;
     }
@@ -64,12 +66,14 @@ function getTypes(data) {
     if (typeName) {
       currentType = {
         ...rest,
+        names: {},
         values: {},
       };
       result[typeName] = currentType;
       return;
     }
     if (currentType && value !== undefined) {
+      currentType.names[row.valueName] = Number(row.value);
       currentType.values[Number(row.value)] = rest;
     }
   });
