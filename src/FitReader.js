@@ -22,7 +22,6 @@ class FitReader {
   }
 
   parse(onProgress) {
-    onProgress("testing");
     this.header = readFileHeader(this.file);
     this.maxPos = this.header.headerSize + this.header.dataSize;
     this.definitionCounter = {};
