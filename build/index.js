@@ -1,6 +1,6 @@
 /*!
  * 
- *   fit-reader v1.0.0
+ *   fit-reader v1.0.1
  *   https://github.com/harryo/fit-reader
  * 
  *   Copyright (c) Harry Oosterveen (https://github.com/harryo)
