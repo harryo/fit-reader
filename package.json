@@ -47,7 +47,7 @@
     "url-loader": "^3.0.0",
     "webpack": "^4.42.0",
     "webpack-cli": "^3.3.11",
-    "xlsx": "^0.15.5"
+    "xlsx": "^0.17.0"
   },
   "dependencies": {
     "lodash": "^4.17.15"
